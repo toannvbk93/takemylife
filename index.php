@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
   <head>
 
@@ -9,6 +9,16 @@
     <meta name="author" content="">
 
     <title>Agency - Start Bootstrap Theme</title>
+	
+	<script language="javascript">
+            function changeValue(val)
+            {
+                if (val==="vi") {
+                    window.location.href = "?lang=vi"; }
+                else { 
+                    window.location.href = "?lang=en"; }
+            }
+        </script>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +36,61 @@
   </head>
 
   <body id="page-top">
-
+    
+	<?php
+        
+        include_once 'LanguageHelper.php';
+        
+        // Gọi hàm checkLang để xem user chọn ngôn ngữ nào
+        $object = new LanguageHelper();
+        $lang = $object->checkLang();
+        
+        // User chọn ngôn ngữ nào thì mình sẽ include file ngôn ngữ đó vào page
+        include_once($lang);
+        
+        // Hiển thị giao diện ngôn ngữ dựa vào option được chọn
+        $vi = $main['en-vi'];
+        $en = $main['en-en'];
+        $language = $main['language'];
+        
+        echo <<<_LANGUAGE_
+                    <form>   
+                        <b>$language:</b> 
+                        <select name="lang" id="lang" onchange="changeValue(this.value)">
+                
+_LANGUAGE_;
+        if (isset($_GET['lang']))
+        {
+            if ($_GET['lang'] == "vi")
+            {
+                echo <<<_LANGUAGE_
+                    <option value="vi" selected="selected">$vi</option>
+                    <option value="en">$en</option>
+_LANGUAGE_;
+            }
+            else
+            {
+                echo <<<_LANGUAGE_
+                    <option value="vi">$vi</option>
+                    <option value="en" selected="selected">$en</option>
+_LANGUAGE_;
+            }
+            echo <<<_LANGUAGE_
+                </select>
+                </form>
+_LANGUAGE_;
+        }
+        else
+        {
+            echo <<<_LANGUAGE_
+                    <option value="vi" selected="selected">$vi</option>
+                    <option value="en">$en</option>
+                </select>
+                </form>
+_LANGUAGE_;
+        }
+        ?>
+	
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
       <div class="container">
